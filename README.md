@@ -35,7 +35,7 @@ configuration := Configuration{}
 err := gonfig.GetConf(getFileName(), &configuration)
 ```
 
-Now we can use configuration structure as if it was come from one source.
+Now we can use configuration structure as if it was coming from one source.
 
 ## When do you have to use it ?
 
