@@ -1,6 +1,6 @@
 # gonfig
 
-github.com/tkanos/gonfig is a lightweigh package, that give the ability to have all our json config file and env variables in one config object.
+github.com/tkanos/gonfig is a lightweight package, that give the ability to have all our json config file and env variables in one config object.
 
 
 For that we have to define our configuration structure :
