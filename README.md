@@ -38,7 +38,7 @@ $ go get github.com/tkanos/gonfig
 
 ```golang
 configuration := Configuration{}
-err := gonfig.GetConf(getFileName(), &configuration)
+err := gonfig.GetConf("pathtomyjonfile.json", &configuration)
 ```
 
 Now we can use configuration structure as if it was coming from one source.
