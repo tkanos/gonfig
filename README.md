@@ -50,7 +50,7 @@ And have a generic way to get all env variables define in your struct.
 
 ## Sample
 
-Yu can find a sample of the use of Gonfig project [HERE](https://github.com/Tkanos/gonfig-sample)
+You can find a sample of the use of Gonfig project [HERE](https://github.com/Tkanos/gonfig-sample)
 
 
 # Links
