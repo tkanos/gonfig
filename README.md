@@ -55,3 +55,4 @@ Yu can find a sample of the use of Gonfig project [HERE](https://github.com/Tkan
 
 # Links
 - [Best practices of configuration file](https://medium.com/@tkanos/best-practices-for-configuration-file-in-your-code-2d6add3f4b86#.dze386j1t)
+- [Sample](https://github.com/Tkanos/gonfig-sample)
