@@ -7,7 +7,27 @@ import (
 	"strconv"
 )
 
-func GetJsonConfiguration(filename string, configuration interface{}) error {
+var configurationData interface{} = nil
+
+func GetConf(filename string, configuration interface{}) error {
+	var err error = nil
+
+	if configurationData != nil {
+		configuration = configurationData
+		return nil
+	}
+
+	err = getFromJson(filename, configuration)
+	if err == nil {
+		getFromEnvVariables(configuration)
+	}
+
+	configurationData = configuration
+
+	return err
+}
+
+func getFromJson(filename string, configuration interface{}) error {
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -23,7 +43,7 @@ func GetJsonConfiguration(filename string, configuration interface{}) error {
 	return nil
 }
 
-func GetEnvVariablesConfiguration(configuration interface{}) {
+func getFromEnvVariables(configuration interface{}) {
 	typ := reflect.TypeOf(configuration)
 	// if a pointer to a struct is passed, get the type of the dereferenced object
 	if typ.Kind() == reflect.Ptr {
