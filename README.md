@@ -30,6 +30,12 @@ $ docker run [...] -e Connection_String="........" [...]
 
 So in order to hide this 2 sources of information to our developpers, we will use the magical tkanos/gonfig package :D
 
+So don't forget to go get :
+
+```bash
+$ go get github.com/tkanos/gonfig
+```
+
 ```golang
 configuration := Configuration{}
 err := gonfig.GetConf(getFileName(), &configuration)
