@@ -29,6 +29,10 @@ func GetConf(filename string, configuration interface{}) error {
 
 func getFromJson(filename string, configuration interface{}) error {
 
+	if len(filename) == 0 {
+		return nil
+	}
+
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
