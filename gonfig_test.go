@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
+func Test_GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
 
 	type Conf struct {
 	}
@@ -17,7 +17,7 @@ func GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_not_panic_if_wrong_data(t *testing.T) {
+func Test_getFromEnvVariables_should_not_panic_if_wrong_data(t *testing.T) {
 	type Conf struct {
 		Id int
 	}
@@ -30,7 +30,7 @@ func getFromEnvVariables_should_not_panic_if_wrong_data(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_int(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_int(t *testing.T) {
 	type Conf struct {
 		Id int
 	}
@@ -43,7 +43,7 @@ func getFromEnvVariables_should_find_and_parse_int(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_int16(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_int16(t *testing.T) {
 	type Conf struct {
 		Id int16
 	}
@@ -56,7 +56,7 @@ func getFromEnvVariables_should_find_and_parse_int16(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_int32(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_int32(t *testing.T) {
 	type Conf struct {
 		Id int32
 	}
@@ -69,7 +69,7 @@ func getFromEnvVariables_should_find_and_parse_int32(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_int64(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_int64(t *testing.T) {
 	type Conf struct {
 		Id int64
 	}
@@ -82,7 +82,7 @@ func getFromEnvVariables_should_find_and_parse_int64(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_uint(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_uint(t *testing.T) {
 	type Conf struct {
 		Id uint
 	}
@@ -95,7 +95,7 @@ func getFromEnvVariables_should_find_and_parse_uint(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_uint16(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_uint16(t *testing.T) {
 	type Conf struct {
 		Id uint16
 	}
@@ -108,7 +108,7 @@ func getFromEnvVariables_should_find_and_parse_uint16(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_uint32(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_uint32(t *testing.T) {
 	type Conf struct {
 		Id uint32
 	}
@@ -121,7 +121,7 @@ func getFromEnvVariables_should_find_and_parse_uint32(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_uint64(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_uint64(t *testing.T) {
 	type Conf struct {
 		Id uint64
 	}
@@ -134,7 +134,7 @@ func getFromEnvVariables_should_find_and_parse_uint64(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_bool(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_bool(t *testing.T) {
 	type Conf struct {
 		Id bool
 	}
@@ -147,7 +147,7 @@ func getFromEnvVariables_should_find_and_parse_bool(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_float32(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_float32(t *testing.T) {
 	type Conf struct {
 		Id float32
 	}
@@ -160,7 +160,7 @@ func getFromEnvVariables_should_find_and_parse_float32(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_float64(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_float64(t *testing.T) {
 	type Conf struct {
 		Id float64
 	}
@@ -173,7 +173,7 @@ func getFromEnvVariables_should_find_and_parse_float64(t *testing.T) {
 	}
 }
 
-func getFromEnvVariables_should_find_and_parse_string(t *testing.T) {
+func Test_getFromEnvVariables_should_find_and_parse_string(t *testing.T) {
 	type Conf struct {
 		Id string
 	}
