@@ -1,3 +1,6 @@
+// Package gonfig implements simple configuration reading 
+// from both JSON files and enviornment variables.
+
 package gonfig
 
 import (
@@ -9,12 +12,13 @@ import (
 
 var configurationData interface{} = nil
 
-func GetConf(filename string, configuration interface{}) error {
-	var err error = nil
+// GetConf aggregates all the JSON and enviornment variable values
+// and puts them into the passed interface.
+func GetConf(filename string, configuration interface{}) (err error) {
 
 	if configurationData != nil {
 		configuration = configurationData
-		return nil
+		return
 	}
 
 	err = getFromJson(filename, configuration)
@@ -24,27 +28,27 @@ func GetConf(filename string, configuration interface{}) error {
 
 	configurationData = configuration
 
-	return err
+	return
 }
 
-func getFromJson(filename string, configuration interface{}) error {
+func getFromJson(filename string, configuration interface{}) (err error) {
 
 	if len(filename) == 0 {
-		return nil
+		return
 	}
 
 	file, err := os.Open(filename)
 	if err != nil {
-		return err
+		return
 	}
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&configuration)
 	if err != nil {
-		return err
+		return
 	}
 
-	return nil
+	return
 }
 
 func getFromEnvVariables(configuration interface{}) {
