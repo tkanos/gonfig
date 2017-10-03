@@ -1,9 +1,10 @@
 # gonfig
 
-github.com/tkanos/gonfig is a lightweight package, that give the ability to have all our json config file and env variables in one config object.
+gonfig is a lightweight Golang package for intergrating both JSON configs and enviornment variables into one config object.
 
+## Usage
 
-For that we have to define our configuration structure :
+First define a configuration structure:
 
 ```golang
 type Configuration struct {
@@ -12,7 +13,7 @@ type Configuration struct {
 }
 ```
 
-and our json config file as well 
+Then fill in our JSON file:
 
 ```json
 {
@@ -20,39 +21,52 @@ and our json config file as well
 }
 ```
 
-As you can see the Connection_String field is not provided on the config file, in order to follow the [Best practices of configuration file](https://medium.com/@tkanos/best-practices-for-configuration-file-in-your-code-2d6add3f4b86#.dze386j1t)
-It will is an external configuration, no depend of our code, that will be provided on the env variables.
+We do not define `Connection_String` in the JSON as we would prefer to define that through an enviornment variable.
 
-On Docker :
+[Best practices of configuration file](https://medium.com/@tkanos/best-practices-for-configuration-file-in-your-code-2d6add3f4b86#.dze386j1t)
+
+using Docker:
 ```bash
-$ docker run [...] -e Connection_String="........" [...]
+$ docker run [...] -e Connection_String="..." [...]
 ```
 
-So in order to hide this 2 sources of information to our developpers, we will use the magical tkanos/gonfig package :D
-
-So don't forget to go get :
+To make this simple for developers we can use gonfig to easily fill in our struct.
 
 ```bash
 $ go get github.com/tkanos/gonfig
 ```
 
 ```golang
+import "github.com/tkanos/gonfig"
+
 configuration := Configuration{}
 err := gonfig.GetConf("pathtomyjonfile.json", &configuration)
+if err != nil {
+	panic(err)
+}
 ```
 
-Now we can use configuration structure as if it was coming from one source.
+Now we can use the configuration as if it was coming from one source.
 
-## When do you have to use it ?
+```golang
+// pseudo code
+if configuration.Port == 8080 {
+	return true
+}
+if configuration.Connection_String != nil {
+	return true
+}
+```
 
-Well to be honest if we have to handle few env variables. It's better to set your configuration structure yourself :
+## When should gonfig be used?
+
+If you have a limited number of enviornment configuration variables, it's probably better to set the struct values yourself.
 
 ```golang
 configuration.Connection_String = os.Getenv("Connection_String")
 ```
 
-Gonfig will be useful to have a static configuration that allow you to have all the config context everywhere in your app.
-And have a generic way to get all env variables define in your struct.
+gonfig makes it easier to combine JSON and enviornment variables into one struct automatically.
 
 ## Sample
 
