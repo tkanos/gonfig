@@ -1,10 +1,11 @@
-// Package gonfig implements simple configuration reading 
+// Package gonfig implements simple configuration reading
 // from both JSON files and enviornment variables.
 
 package gonfig
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"reflect"
 	"strconv"
@@ -16,8 +17,14 @@ var configurationData interface{} = nil
 // and puts them into the passed interface.
 func GetConf(filename string, configuration interface{}) (err error) {
 
+	configValue := reflect.ValueOf(configuration)
+	if typ := configValue.Type(); typ.Kind() != reflect.Ptr || typ.Elem().Kind() != reflect.Struct {
+		return fmt.Errorf("configuration should be a pointer to a struct type.")
+	}
 	if configurationData != nil {
-		configuration = configurationData
+		//configuration = configurationData
+		dataValue := reflect.ValueOf(configurationData)
+		configValue.Elem().Set(dataValue.Elem())
 		return
 	}
 
