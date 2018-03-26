@@ -11,8 +11,6 @@ import (
 	"strconv"
 )
 
-var configurationData interface{} = nil
-
 // GetConf aggregates all the JSON and enviornment variable values
 // and puts them into the passed interface.
 func GetConf(filename string, configuration interface{}) (err error) {
@@ -21,19 +19,11 @@ func GetConf(filename string, configuration interface{}) (err error) {
 	if typ := configValue.Type(); typ.Kind() != reflect.Ptr || typ.Elem().Kind() != reflect.Struct {
 		return fmt.Errorf("configuration should be a pointer to a struct type.")
 	}
-	if configurationData != nil {
-		//configuration = configurationData
-		dataValue := reflect.ValueOf(configurationData)
-		configValue.Elem().Set(dataValue.Elem())
-		return
-	}
-
+	
 	err = getFromJson(filename, configuration)
 	if err == nil {
 		getFromEnvVariables(configuration)
 	}
-
-	configurationData = configuration
 
 	return
 }
