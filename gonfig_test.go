@@ -17,6 +17,18 @@ func Test_GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
 	}
 }
 
+func Test_GetFromJson_Filename_Should_Not_be_Panic(t *testing.T) {
+
+	type Conf struct {
+	}
+	conf := Conf{}
+	err := getFromJson("test.json", &conf)
+
+	if err != nil {
+		t.Error("getFromJson file not found", err)
+	}
+}
+
 func Test_getFromEnvVariables_should_not_panic_if_wrong_data(t *testing.T) {
 	type Conf struct {
 		Id int
