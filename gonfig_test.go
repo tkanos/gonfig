@@ -2,6 +2,9 @@ package gonfig
 
 import (
 	"os"
+	"io"
+	"io/ioutil"
+	"strings"
 	"testing"
 )
 
@@ -17,12 +20,30 @@ func Test_GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
 	}
 }
 
+func tmpFileWithContent(content string, t *testing.T) (string) {
+
+	file, err := ioutil.TempFile("", "gonfig_test_data_")
+	if err != nil {
+		t.Error("Error creating file with test data", err)
+	}
+
+	_, err = io.Copy(file, strings.NewReader("{}"))
+	if err != nil {
+		t.Error("Error writing test data", err)
+	}
+
+	return file.Name()
+}
+
 func Test_GetFromJson_Filename_Should_Not_be_Panic(t *testing.T) {
+
+	filename := tmpFileWithContent("{}", t)
+	defer os.Remove(filename)
 
 	type Conf struct {
 	}
 	conf := Conf{}
-	err := getFromJson("test.json", &conf)
+	err := getFromJson(filename, &conf)
 
 	if err != nil {
 		t.Error("getFromJson file not found", err)
