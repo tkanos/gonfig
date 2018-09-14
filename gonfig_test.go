@@ -1,9 +1,9 @@
 package gonfig
 
 import (
-	"os"
 	"io"
 	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
@@ -20,7 +20,7 @@ func Test_GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
 	}
 }
 
-func tmpFileWithContent(content string, t *testing.T) (string) {
+func tmpFileWithContent(content string, t *testing.T) string {
 
 	file, err := ioutil.TempFile("", "gonfig_test_data_")
 	if err != nil {
@@ -211,6 +211,19 @@ func Test_getFromEnvVariables_should_find_and_parse_string(t *testing.T) {
 		Id string
 	}
 	os.Setenv("Id", "abc")
+	conf := Conf{}
+	getFromEnvVariables(&conf)
+
+	if conf.Id != "abc" {
+		t.Error("Id should be abc", conf.Id)
+	}
+}
+
+func Test_getFromCustomEnvVariables_should_find_and_parse_string(t *testing.T) {
+	type Conf struct {
+		Id string `env:"CONF_ID"`
+	}
+	os.Setenv("CONF_ID", "abc")
 	conf := Conf{}
 	getFromEnvVariables(&conf)
 
