@@ -58,6 +58,17 @@ if configuration.Connection_String != nil {
 }
 ```
 
+### using different environment variables name
+
+If your env variable has a different name than the json one, you can just define an env attribute
+
+```golang
+type Configuration struct {
+	Port              int  `env:"MYAPP_PORT"`
+	Connection_String string
+}
+```
+
 ## When should gonfig be used?
 
 If you have a limited number of enviornment configuration variables, it's probably better to set the struct values yourself.
