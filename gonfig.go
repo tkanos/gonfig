@@ -11,6 +11,9 @@ import (
 	"strconv"
 )
 
+// tag name to override the field name of an environment variable
+const envTagName = "env"
+
 // GetConf aggregates all the JSON and enviornment variable values
 // and puts them into the passed interface.
 func GetConf(filename string, configuration interface{}) (err error) {
@@ -19,7 +22,7 @@ func GetConf(filename string, configuration interface{}) (err error) {
 	if typ := configValue.Type(); typ.Kind() != reflect.Ptr || typ.Elem().Kind() != reflect.Struct {
 		return fmt.Errorf("configuration should be a pointer to a struct type.")
 	}
-	
+
 	err = getFromJson(filename, configuration)
 	if err == nil {
 		getFromEnvVariables(configuration)
@@ -57,7 +60,16 @@ func getFromEnvVariables(configuration interface{}) {
 
 	for i := 0; i < typ.NumField(); i++ {
 		p := typ.Field(i)
-		value := os.Getenv(p.Name)
+
+		// check if we've got a field name override for the environment
+		tagContent := p.Tag.Get(envTagName)
+		value := ""
+		if len(tagContent) > 0 {
+			value = os.Getenv(tagContent)
+		} else {
+			value = os.Getenv(p.Name)
+		}
+
 		if !p.Anonymous && len(value) > 0 {
 			// struct
 			s := reflect.ValueOf(configuration).Elem()
