@@ -8,15 +8,15 @@ import (
 	"testing"
 )
 
-func Test_GetFromJson_Filename_Empty_Should_Not_Panic(t *testing.T) {
+func Test_GetFromYAML_Filename_Empty_Should_Not_Panic(t *testing.T) {
 
 	type Conf struct {
 	}
 	conf := Conf{}
-	err := getFromJson("", &conf)
+	err := getFromYAML("", &conf)
 
 	if err != nil {
-		t.Error("getFromJson should not panic", err)
+		t.Error("getFromYAML should not panic", err)
 	}
 }
 
@@ -35,7 +35,7 @@ func tmpFileWithContent(content string, t *testing.T) string {
 	return file.Name()
 }
 
-func Test_GetFromJson_Filename_Should_Not_be_Panic(t *testing.T) {
+func Test_GetFromYAML_Filename_Should_Not_be_Panic(t *testing.T) {
 
 	filename := tmpFileWithContent("{}", t)
 	defer os.Remove(filename)
@@ -43,10 +43,10 @@ func Test_GetFromJson_Filename_Should_Not_be_Panic(t *testing.T) {
 	type Conf struct {
 	}
 	conf := Conf{}
-	err := getFromJson(filename, &conf)
+	err := getFromYAML(filename, &conf)
 
 	if err != nil {
-		t.Error("getFromJson file not found", err)
+		t.Error("getFromYAML file not found", err)
 	}
 }
 

@@ -4,7 +4,8 @@
 package gonfig
 
 import (
-	"encoding/json"
+	"github.com/ghodss/yaml"
+	"io/ioutil"
 	"fmt"
 	"os"
 	"reflect"
@@ -23,7 +24,7 @@ func GetConf(filename string, configuration interface{}) (err error) {
 		return fmt.Errorf("configuration should be a pointer to a struct type.")
 	}
 
-	err = getFromJson(filename, configuration)
+	err = getFromYAML(filename, configuration)
 	if err == nil {
 		getFromEnvVariables(configuration)
 	}
@@ -31,7 +32,7 @@ func GetConf(filename string, configuration interface{}) (err error) {
 	return
 }
 
-func getFromJson(filename string, configuration interface{}) (err error) {
+func getFromYAML(filename string, configuration interface{}) (err error) {
 
 	if len(filename) == 0 {
 		return
@@ -41,9 +42,12 @@ func getFromJson(filename string, configuration interface{}) (err error) {
 	if err != nil {
 		return
 	}
-
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&configuration)
+	defer file.Close()
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		return
+	}
+	err = yaml.Unmarshal(data, &configuration)
 	if err != nil {
 		return
 	}
