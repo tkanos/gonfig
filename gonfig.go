@@ -4,12 +4,13 @@
 package gonfig
 
 import (
-	"github.com/ghodss/yaml"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"reflect"
 	"strconv"
+
+	"github.com/ghodss/yaml"
 )
 
 // tag name to override the field name of an environment variable
@@ -21,7 +22,7 @@ func GetConf(filename string, configuration interface{}) (err error) {
 
 	configValue := reflect.ValueOf(configuration)
 	if typ := configValue.Type(); typ.Kind() != reflect.Ptr || typ.Elem().Kind() != reflect.Struct {
-		return fmt.Errorf("configuration should be a pointer to a struct type.")
+		return fmt.Errorf("configuration should be a pointer to a struct type")
 	}
 
 	err = getFromYAML(filename, configuration)
@@ -81,35 +82,35 @@ func getFromEnvVariables(configuration interface{}) {
 			if s.Kind() == reflect.Struct {
 				// exported field
 				f := s.FieldByName(p.Name)
-				if f.IsValid() {
+				if f.IsValid() && f.CanSet() {
 					// A Value can be changed only if it is
 					// addressable and was not obtained by
 					// the use of unexported struct fields.
-					if f.CanSet() {
-						// change value
-						kind := f.Kind()
-						if kind == reflect.Int || kind == reflect.Int64 {
-							setStringToInt(f, value, 64)
-						} else if kind == reflect.Int32 {
-							setStringToInt(f, value, 32)
-						} else if kind == reflect.Int16 {
-							setStringToInt(f, value, 16)
-						} else if kind == reflect.Uint || kind == reflect.Uint64 {
-							setStringToUInt(f, value, 64)
-						} else if kind == reflect.Uint32 {
-							setStringToUInt(f, value, 32)
-						} else if kind == reflect.Uint16 {
-							setStringToUInt(f, value, 16)
-						} else if kind == reflect.Bool {
-							setStringToBool(f, value)
-						} else if kind == reflect.Float64 {
-							setStringToFloat(f, value, 64)
-						} else if kind == reflect.Float32 {
-							setStringToFloat(f, value, 32)
-						} else if kind == reflect.String {
-							f.SetString(value)
-						}
+
+					// change value
+					kind := f.Kind()
+					if kind == reflect.Int || kind == reflect.Int64 {
+						setStringToInt(f, value, 64)
+					} else if kind == reflect.Int32 {
+						setStringToInt(f, value, 32)
+					} else if kind == reflect.Int16 {
+						setStringToInt(f, value, 16)
+					} else if kind == reflect.Uint || kind == reflect.Uint64 {
+						setStringToUInt(f, value, 64)
+					} else if kind == reflect.Uint32 {
+						setStringToUInt(f, value, 32)
+					} else if kind == reflect.Uint16 {
+						setStringToUInt(f, value, 16)
+					} else if kind == reflect.Bool {
+						setStringToBool(f, value)
+					} else if kind == reflect.Float64 {
+						setStringToFloat(f, value, 64)
+					} else if kind == reflect.Float32 {
+						setStringToFloat(f, value, 32)
+					} else if kind == reflect.String {
+						f.SetString(value)
 					}
+
 				}
 			}
 		}
