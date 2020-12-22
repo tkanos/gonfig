@@ -231,3 +231,23 @@ func Test_getFromCustomEnvVariables_should_find_and_parse_string(t *testing.T) {
 		t.Error("Id should be abc", conf.Id)
 	}
 }
+
+func Test_getFromCustomEnvVariables_should_find_and_parse_object(t *testing.T) {
+	type SubConf struct {
+		Id     string
+		Number int
+	}
+	type Conf struct {
+		Subconf SubConf `env:"SUB_CONF_ID"`
+	}
+	os.Setenv("SUB_CONF_ID", "{\"Id\":\"abc\", \"Number\": 123}")
+	conf := Conf{}
+	getFromEnvVariables(&conf)
+
+	if conf.Subconf.Id != "abc" {
+		t.Errorf("Id should be abc %s", conf.Subconf.Id)
+	}
+	if conf.Subconf.Number != 123 {
+		t.Errorf("Number should be 123 %d", conf.Subconf.Number)
+	}
+}
