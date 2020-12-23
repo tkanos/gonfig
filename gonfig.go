@@ -191,7 +191,7 @@ func setJSONStringToArray(f reflect.Value, value string) {
 	for i, v := range jsonArr {
 		jsonItemVal, err := json.Marshal(v)
 		if err != nil {
-			fmt.Errorf("Cannot marshall array itemelement")
+			fmt.Errorf("Cannot marshall array item element")
 			return
 		}
 		setValue(f.Index(i), string(jsonItemVal[:]))
