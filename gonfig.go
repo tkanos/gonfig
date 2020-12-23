@@ -178,9 +178,7 @@ func setJSONStringToStruct(f reflect.Value, value string) {
 }
 
 func setJSONStringToArray(f reflect.Value, value string) {
-
 	var jsonArr []interface{}
-
 	err := json.Unmarshal([]byte(value), &jsonArr)
 	if err != nil {
 		fmt.Errorf("Cannot decode string into array")
