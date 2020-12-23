@@ -119,6 +119,8 @@ func setValue(f reflect.Value, value string) {
 			f.SetString(value)
 		} else if kind == reflect.Struct {
 			setJSONStringToStruct(f, value)
+		} else if kind == reflect.Slice || kind == reflect.Array {
+			setJSONStringToArray(f, value)
 		}
 	}
 
@@ -163,7 +165,6 @@ func setStringToFloat(f reflect.Value, value string, bitSize int) {
 }
 
 func setJSONStringToStruct(f reflect.Value, value string) {
-
 	jsonMap := make(map[string]interface{})
 	err := json.Unmarshal([]byte(value), &jsonMap)
 	if err != nil {
@@ -173,5 +174,26 @@ func setJSONStringToStruct(f reflect.Value, value string) {
 	for k, v := range jsonMap {
 		subField := f.Addr().Elem().FieldByName(k)
 		setValue(subField, fmt.Sprintf("%v", v))
+	}
+}
+
+func setJSONStringToArray(f reflect.Value, value string) {
+
+	var jsonArr []interface{}
+
+	err := json.Unmarshal([]byte(value), &jsonArr)
+	if err != nil {
+		fmt.Errorf("Cannot decode string into array")
+		return
+	}
+
+	f.Set(reflect.MakeSlice(f.Type(), len(jsonArr), len(jsonArr)))
+	for i, v := range jsonArr {
+		jsonItemVal, err := json.Marshal(v)
+		if err != nil {
+			fmt.Errorf("Cannot marshall array itemelement")
+			return
+		}
+		setValue(f.Index(i), string(jsonItemVal[:]))
 	}
 }

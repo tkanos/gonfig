@@ -251,3 +251,57 @@ func Test_getFromCustomEnvVariables_should_find_and_parse_object(t *testing.T) {
 		t.Errorf("Number should be 123 %d", conf.Subconf.Number)
 	}
 }
+
+func Test_getFromCustomEnvVariables_should_find_and_parse_JSONObjectArray(t *testing.T) {
+	type SubConf struct {
+		ID     string
+		Number int
+	}
+	type Conf struct {
+		Subconfs []SubConf `env:"SUB_CONFS"`
+	}
+	os.Setenv("SUB_CONFS", "[{\"ID\":\"abc\", \"Number\": 123},{\"ID\":\"def\", \"Number\": 456}]")
+	conf := Conf{}
+	getFromEnvVariables(&conf)
+
+	if len(conf.Subconfs) != 2 {
+		t.Errorf("Conf should have 2 Subconfs items %d", len(conf.Subconfs))
+	}
+
+	if conf.Subconfs[0].ID != "abc" {
+		t.Errorf("ID should be abc %s", conf.Subconfs[0].ID)
+	}
+	if conf.Subconfs[0].Number != 123 {
+		t.Errorf("Number should be 123 %d", conf.Subconfs[0].Number)
+	}
+	if conf.Subconfs[1].ID != "def" {
+		t.Errorf("ID should be def %s", conf.Subconfs[1].ID)
+	}
+	if conf.Subconfs[1].Number != 456 {
+		t.Errorf("Number should be 456 %d", conf.Subconfs[1].Number)
+	}
+}
+
+func Test_getFromCustomEnvVariables_should_find_and_parse_JSONArray(t *testing.T) {
+
+	type Conf struct {
+		Values []int `env:"SUB_VALUES"`
+	}
+	os.Setenv("SUB_VALUES", "[1,2,3]")
+	conf := Conf{}
+	getFromEnvVariables(&conf)
+
+	if len(conf.Values) != 3 {
+		t.Errorf("Conf should have 3 items %d", len(conf.Values))
+	}
+	if conf.Values[0] != 1 {
+		t.Errorf("Values[0] should be 1 %d", conf.Values[0])
+	}
+	if conf.Values[1] != 2 {
+		t.Errorf("Values[1] should be 2 %d", conf.Values[1])
+	}
+	if conf.Values[2] != 3 {
+		t.Errorf("Values[2] should be 3 %d", conf.Values[2])
+	}
+
+}
