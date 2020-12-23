@@ -238,9 +238,9 @@ func Test_getFromCustomEnvVariables_should_find_and_parse_object(t *testing.T) {
 		Number int
 	}
 	type Conf struct {
-		Subconf SubConf `env:"SUB_CONF_ID"`
+		Subconf SubConf `env:"SUB_CONF"`
 	}
-	os.Setenv("SUB_CONF_ID", "{\"ID\":\"abc\", \"Number\": 123}")
+	os.Setenv("SUB_CONF", "{\"ID\":\"abc\", \"Number\": 123}")
 	conf := Conf{}
 	getFromEnvVariables(&conf)
 
