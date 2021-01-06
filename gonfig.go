@@ -4,6 +4,7 @@
 package gonfig
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -82,39 +83,47 @@ func getFromEnvVariables(configuration interface{}) {
 			if s.Kind() == reflect.Struct {
 				// exported field
 				f := s.FieldByName(p.Name)
-				if f.IsValid() && f.CanSet() {
-					// A Value can be changed only if it is
-					// addressable and was not obtained by
-					// the use of unexported struct fields.
-
-					// change value
-					kind := f.Kind()
-					if kind == reflect.Int || kind == reflect.Int64 {
-						setStringToInt(f, value, 64)
-					} else if kind == reflect.Int32 {
-						setStringToInt(f, value, 32)
-					} else if kind == reflect.Int16 {
-						setStringToInt(f, value, 16)
-					} else if kind == reflect.Uint || kind == reflect.Uint64 {
-						setStringToUInt(f, value, 64)
-					} else if kind == reflect.Uint32 {
-						setStringToUInt(f, value, 32)
-					} else if kind == reflect.Uint16 {
-						setStringToUInt(f, value, 16)
-					} else if kind == reflect.Bool {
-						setStringToBool(f, value)
-					} else if kind == reflect.Float64 {
-						setStringToFloat(f, value, 64)
-					} else if kind == reflect.Float32 {
-						setStringToFloat(f, value, 32)
-					} else if kind == reflect.String {
-						f.SetString(value)
-					}
-
-				}
+				setValue(f, value)
 			}
 		}
 	}
+}
+
+func setValue(f reflect.Value, value string) {
+	// change value
+	kind := f.Kind()
+
+	if f.IsValid() && f.CanSet() {
+		// A Value can be changed only if it is
+		// addressable and was not obtained by
+		// the use of unexported struct fields.
+		if kind == reflect.Int || kind == reflect.Int64 {
+			setStringToInt(f, value, 64)
+		} else if kind == reflect.Int32 {
+			setStringToInt(f, value, 32)
+		} else if kind == reflect.Int16 {
+			setStringToInt(f, value, 16)
+		} else if kind == reflect.Uint || kind == reflect.Uint64 {
+			setStringToUInt(f, value, 64)
+		} else if kind == reflect.Uint32 {
+			setStringToUInt(f, value, 32)
+		} else if kind == reflect.Uint16 {
+			setStringToUInt(f, value, 16)
+		} else if kind == reflect.Bool {
+			setStringToBool(f, value)
+		} else if kind == reflect.Float64 {
+			setStringToFloat(f, value, 64)
+		} else if kind == reflect.Float32 {
+			setStringToFloat(f, value, 32)
+		} else if kind == reflect.String {
+			f.SetString(value)
+		} else if kind == reflect.Struct {
+			setJSONStringToStruct(f, value)
+		} else if kind == reflect.Slice || kind == reflect.Array {
+			setJSONStringToArray(f, value)
+		}
+	}
+
 }
 
 func setStringToInt(f reflect.Value, value string, bitSize int) {
@@ -152,5 +161,37 @@ func setStringToFloat(f reflect.Value, value string, bitSize int) {
 		if !f.OverflowFloat(convertedValue) {
 			f.SetFloat(convertedValue)
 		}
+	}
+}
+
+func setJSONStringToStruct(f reflect.Value, value string) {
+	jsonMap := make(map[string]interface{})
+	err := json.Unmarshal([]byte(value), &jsonMap)
+	if err != nil {
+		fmt.Errorf("Cannot decode string into map")
+	}
+
+	for k, v := range jsonMap {
+		subField := f.Addr().Elem().FieldByName(k)
+		setValue(subField, fmt.Sprintf("%v", v))
+	}
+}
+
+func setJSONStringToArray(f reflect.Value, value string) {
+	var jsonArr []interface{}
+	err := json.Unmarshal([]byte(value), &jsonArr)
+	if err != nil {
+		fmt.Errorf("Cannot decode string into array")
+		return
+	}
+
+	f.Set(reflect.MakeSlice(f.Type(), len(jsonArr), len(jsonArr)))
+	for i, v := range jsonArr {
+		jsonItemVal, err := json.Marshal(v)
+		if err != nil {
+			fmt.Errorf("Cannot marshall array item element")
+			return
+		}
+		setValue(f.Index(i), string(jsonItemVal[:]))
 	}
 }
