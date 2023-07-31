@@ -1,6 +1,6 @@
 # gonfig
 
-gonfig is a lightweight Golang package for intergrating both JSON configs and enviornment variables into one config object.
+gonfig is a lightweight Golang package for intergrating both JSON configs and environment variables into one config object.
 
 ## Usage
 
@@ -21,7 +21,7 @@ Then fill in our JSON file:
 }
 ```
 
-We do not define `Connection_String` in the JSON as we would prefer to define that through an enviornment variable.
+We do not define `Connection_String` in the JSON as we would prefer to define that through an environment variable.
 
 [Best practices of configuration file](https://medium.com/@tkanos/best-practices-for-configuration-file-in-your-code-2d6add3f4b86#.dze386j1t)
 
@@ -69,15 +69,34 @@ type Configuration struct {
 }
 ```
 
+### using prefixes for environment variables name
+
+If 
+- an env attribute was not defined
+- environment variable with required name does not exist
+ 
+gonfig looking for **prefixed** name. This name created from the name of the configuration file.
+
+For example for file *example*.json:
+```json
+{
+	"Port": 8080,
+    "Connection_String": "connection_string"
+}
+```
+prefix will be **EXAMPLE_** and names of environment variables:
+- EXAMPLE_Port
+- EXAMPLE_Connection_String
+
 ## When should gonfig be used?
 
-If you have a limited number of enviornment configuration variables, it's probably better to set the struct values yourself.
+If you have a limited number of environment configuration variables, it's probably better to set the struct values yourself.
 
 ```golang
 configuration.Connection_String = os.Getenv("Connection_String")
 ```
 
-gonfig makes it easier to combine JSON and enviornment variables into one struct automatically.
+gonfig makes it easier to combine JSON and environment variables into one struct automatically.
 
 ## Sample
 

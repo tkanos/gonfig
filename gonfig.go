@@ -1,5 +1,5 @@
 // Package gonfig implements simple configuration reading
-// from both JSON files and enviornment variables.
+// from both JSON files and environment variables.
 
 package gonfig
 
@@ -8,8 +8,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
+	"strings"
 
 	"github.com/ghodss/yaml"
 )
@@ -17,7 +19,7 @@ import (
 // tag name to override the field name of an environment variable
 const envTagName = "env"
 
-// GetConf aggregates all the JSON and enviornment variable values
+// GetConf aggregates all the JSON and environment variable values
 // and puts them into the passed interface.
 func GetConf(filename string, configuration interface{}) (err error) {
 
@@ -28,7 +30,7 @@ func GetConf(filename string, configuration interface{}) (err error) {
 
 	err = getFromYAML(filename, configuration)
 	if err == nil {
-		getFromEnvVariables(configuration)
+		getFromPrefixedEnvVariables(configuration, envPrefix(filename))
 	}
 
 	return
@@ -57,7 +59,8 @@ func getFromYAML(filename string, configuration interface{}) (err error) {
 	return
 }
 
-func getFromEnvVariables(configuration interface{}) {
+func getFromPrefixedEnvVariables(configuration interface{}, envPrefix string) {
+
 	typ := reflect.TypeOf(configuration)
 	// if a pointer to a struct is passed, get the type of the dereferenced object
 	if typ.Kind() == reflect.Ptr {
@@ -73,7 +76,7 @@ func getFromEnvVariables(configuration interface{}) {
 		if len(tagContent) > 0 {
 			value = os.Getenv(tagContent)
 		} else {
-			value = os.Getenv(p.Name)
+			value = getEnv(p.Name, envPrefix)
 		}
 
 		if !p.Anonymous && len(value) > 0 {
@@ -194,4 +197,40 @@ func setJSONStringToArray(f reflect.Value, value string) {
 		}
 		setValue(f.Index(i), string(jsonItemVal[:]))
 	}
+}
+
+func envPrefix(fPath string) string {
+	prefix := strings.ToUpper(baseFileName(fPath)) + "_"
+	return prefix
+}
+
+func baseFileName(fPath string) string {
+	if len(fPath) == 0 {
+		return ""
+	}
+
+	file := filepath.Base(fPath)
+	ext := filepath.Ext(file)
+	name := strings.TrimSuffix(file, ext)
+
+	return name
+}
+
+func getEnv(name string, prefix string) string {
+	if len(prefix) == 0 {
+		return os.Getenv(name)
+	}
+	prefixedName := prefix + name
+	value, ok := os.LookupEnv(prefixedName)
+
+	if !ok {
+		return os.Getenv(name)
+	}
+
+	return value
+}
+
+// Used in gonfig_test.go
+func getFromEnvVariables(configuration interface{}) {
+	getFromPrefixedEnvVariables(configuration, "")
 }
