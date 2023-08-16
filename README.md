@@ -1,6 +1,8 @@
 # gonfig
 
-gonfig is a lightweight Golang package for intergrating both JSON configs and environment variables into one config object.
+Fork of github.com/tkanos/gonfig - added "using prefixes for environment variables name"
+
+gonfig is a lightweight Golang package for integrating both JSON configs and environment variables into one config object.
 
 ## Usage
 

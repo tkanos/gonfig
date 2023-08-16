@@ -1,4 +1,4 @@
-module github.com/tkanos/gonfig
+module github.com/g41797/gonfig
 
 go 1.17
 

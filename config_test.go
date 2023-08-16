@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	gonfig "github.com/tkanos/gonfig"
+	gonfig "github.com/g41797/gonfig"
 )
 
 type configuration struct {

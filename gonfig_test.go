@@ -2,7 +2,6 @@ package gonfig
 
 import (
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -22,7 +21,7 @@ func Test_GetFromYAML_Filename_Empty_Should_Not_Panic(t *testing.T) {
 
 func tmpFileWithContent(content string, t *testing.T) string {
 
-	file, err := ioutil.TempFile("", "gonfig_test_data_")
+	file, err := os.CreateTemp("", "gonfig_test_data_")
 	if err != nil {
 		t.Error("Error creating file with test data", err)
 	}
