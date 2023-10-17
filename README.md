@@ -1,4 +1,4 @@
-# gonfig
+# gonfig [![Go](https://github.com/g41797/gonfig/actions/workflows/go.yml/badge.svg)](https://github.com/g41797/gonfig/actions/workflows/go.yml)
 
 Fork of github.com/tkanos/gonfig - added "using prefixes for environment variables name"
 
