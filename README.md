@@ -35,11 +35,11 @@ $ docker run [...] -e Connection_String="..." [...]
 To make this simple for developers we can use gonfig to easily fill in our struct.
 
 ```bash
-$ go get github.com/tkanos/gonfig
+$ go get github.com/g41797/gonfig
 ```
 
 ```golang
-import "github.com/tkanos/gonfig"
+import "github.com/g41797/gonfig"
 
 configuration := Configuration{}
 err := gonfig.GetConf("pathtomyjonfile.json", &configuration)
@@ -73,11 +73,11 @@ type Configuration struct {
 
 ### using prefixes for environment variables name
 
-If 
-- an env attribute was not defined
-- environment variable with required name does not exist
- 
-gonfig looking for **prefixed** name. This name created from the name of the configuration file.
+If an env attribute was not defined , gonfig 
+- looking for **prefixed** name
+- if this name does not exist - tries to get using former name.
+
+Prefixed name created from the name of the configuration file.
 
 For example for file *example*.json:
 ```json
@@ -89,6 +89,8 @@ For example for file *example*.json:
 prefix will be **EXAMPLE_** and names of environment variables:
 - EXAMPLE_Port
 - EXAMPLE_Connection_String
+
+This feature allows to place the same variables used in different configuration files to environment.
 
 ## When should gonfig be used?
 
@@ -102,9 +104,9 @@ gonfig makes it easier to combine JSON and environment variables into one struct
 
 ## Sample
 
-You can find a sample of the use of Gonfig project [HERE](https://github.com/Tkanos/gonfig-sample)
+You can find a sample of the use of Gonfig project [HERE](https://github.com/tkanos/gonfig-sample)
 
 
 # Links
 - [Best practices of configuration file](https://medium.com/@tkanos/best-practices-for-configuration-file-in-your-code-2d6add3f4b86#.dze386j1t)
-- [Sample](https://github.com/Tkanos/gonfig-sample)
+- [Sample](https://github.com/g41797/gonfig-sample)

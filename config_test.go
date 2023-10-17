@@ -41,13 +41,14 @@ func Test_unmarshalFromJSONFile_AndEnv_ToStruct(t *testing.T) {
 
 // ------------------------------------------------------------------------------------------
 // -- Manually run test under vscode:
-// go test -run ^Test_unmarshalFromJSONFile_AndPrefixedEnv_ToStruct$ github.com/tkanos/gonfig
+// go test -run ^Test_unmarshalFromJSONFile_AndPrefixedEnv_ToStruct$ github.com/g41797/gonfig
 // ------------------------------------------------------------------------------------------
 func Test_unmarshalFromJSONFile_AndPrefixedEnv_ToStruct(t *testing.T) {
 	expected := defaults()
 	expected.Port = 8443
 	fPath := "./_config/example.json"
 
+	os.Setenv("Port", "8080")
 	os.Setenv(envPrefix(fPath)+"Port", strconv.Itoa((expected.Port)))
 
 	actual := configuration{}
